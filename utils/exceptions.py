@@ -1,0 +1,3 @@
+class ApiRequestError(Exception):
+    pass
+
