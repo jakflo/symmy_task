@@ -1,0 +1,16 @@
+name: Docker Image CI
+on: [push, pull_request]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v5
+    - name: Docker build and compose
+      run: docker compose up -d
+    - name: wait for web container
+      run: docker exec symmy_task-web-1 python manage.py check
+    - name: fix perms
+      run: docker exec symmy_task-web-1 chmod u+x ./manage.py
+    - name: run tests
+      run: docker exec symmy_task-web-1 ./manage.py test
